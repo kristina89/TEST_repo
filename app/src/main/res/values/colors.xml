@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#78909C</color>
+    <color name="colorPrimaryDark">#546E7A</color>
+    <color name="colorAccent">#607D8B</color>
+
+    <color name="red">#f90606</color>
+    <color name="dark_green">#008f51</color>
+    <color name="dark_gray_text_color">#212121</color>
+    <color name="light_gray_text_color">#757575</color>
+    <color name="divider_color">#bdbdbd</color>
+
+    <color name="active_color">#E8F5E9</color>
+    <color name="not_active_color">#FFEBEE</color>
+
+    <color name="switcher_active_color">#46BDBF</color>
+
+</resources>

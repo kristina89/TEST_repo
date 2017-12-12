@@ -1,0 +1,77 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.50.1"
+
+default_platform :android
+
+platform :android do
+
+  import_from_git(
+    url: "ssh://git@git.rozdoum.com:7999/tls/fastlane.git",
+    branch: "HEAD",
+    path: "GeneralLanes"
+  )
+
+  #GetSider organisation settings
+  FABRIC_API_TOKEN = "b2956b0b2928344d8a431aeb1e9f34fea0c48c70"
+  FABRIC_BUILD_SECRET = "3db3f22ca5958e025653c6a42c8bf829d831ab10043fead69463cb056f1120f5"
+  #FABRIC_DEFAULT_EMAIL = ""
+  #SLACK_URL = ""
+  SLACK_CHANNEL = "#nclb"
+
+  before_all do
+    ENV["SLACK_URL"] = SLACK_URL
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    version_code = update_build_number_android
+    gradle(task: "assembleDebug")
+    post_to_crashlitics
+    post_to_slack(platfrom: "Android", build_number: version_code, message: "(Dev)")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta_for_prod do
+    version_code = update_build_number_android
+    gradle(task: "assembleProdDebug")
+    post_to_crashlitics
+    post_to_slack(platfrom: "Android", build_number: version_code, message: "(Prod)")
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "assembleRelease")
+    supply
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded. 
+# Learn more at https://github.com/fastlane/fastlane#metrics

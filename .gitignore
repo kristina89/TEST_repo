@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+.DS_Store
+/build
+/.idea
+/captures
+.externalNativeBuild
+/fastlane/README.md
+/fastlane/report.xml
+app/app-debug.apk
+app/libs/
+app/src/main/res/drawable/
+fastlane/actions/

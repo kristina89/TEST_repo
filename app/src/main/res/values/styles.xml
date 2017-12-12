@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--Text Appearance-->
+
+    <style name="TextAppearance.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/dark_gray_text_color</item>
+    </style>
+
+    <style name="TextAppearance.Small.Light" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/light_gray_text_color</item>
+    </style>
+
+    <style name="EnableSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/switcher_active_color</item>
+    </style>
+
+</resources>

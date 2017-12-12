@@ -1,0 +1,99 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+def versionPropsFile = file('version.properties')
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def code = versionProps['VERSION_CODE'].toInteger()
+        def name = versionProps['VERSION_NAME']
+
+        defaultConfig {
+            applicationId "com.enkeli"
+            minSdkVersion 17
+            targetSdkVersion 26
+            versionCode code //1
+            versionName name //1.0
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('keystore/certificate.jks')
+            storePassword "enkeliDev"
+            keyAlias "enkeli"
+            keyPassword "enkeliDev"
+        }
+        debug {
+            storeFile file('keystore/certificate.jks')
+            storePassword "enkeliDev"
+            keyAlias "enkeli"
+            keyPassword "enkeliDev"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.android.gms:play-services-location:11.0.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+}
+
+task('incrementBuildNumber') << {
+    def code = 1
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE']=code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+    }  else {
+        throw new GradleException("Could not read version.properties!")
+    }
+    return code
+}
